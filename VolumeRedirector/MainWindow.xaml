@@ -1,0 +1,70 @@
+﻿<Window x:Class="VolumeRedirector.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Volume Redirector — Impostazioni"
+        Width="480" Height="480"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Intestazione -->
+        <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Margin="0,0,0,4"
+                   Text="Seleziona applicazione target"/>
+        <TextBlock Grid.Row="1" Foreground="Gray" TextWrapping="Wrap" Margin="0,0,0,12"
+                   Text="I tasti Volume Su/Giù modificheranno il volume dell'app selezionata invece del volume di sistema."/>
+
+        <!-- Lista delle app con sessione audio attiva -->
+        <Border Grid.Row="2" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="4">
+            <ListBox x:Name="AppListBox"
+                     SelectionMode="Single"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="4,6">
+                            <TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" Width="200"/>
+                            <TextBlock Foreground="Gray" FontSize="11"
+                                       Text="{Binding ProcessName, StringFormat='({0})'}" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+
+        <!-- Opzioni -->
+        <StackPanel Grid.Row="3" Margin="0,10,0,0">
+            <!-- Il pulsante Riduci a icona manda la finestra nella tray -->
+            <!-- <CheckBox x:Name="MinimizeToTrayCheckBox" Click="MinimizeToTrayCheckBox_Click">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Il pulsante Riduci a icona manda la finestra nella tray"/>
+            </CheckBox> -->
+
+            <!-- Crea/rimuove il collegamento nella cartella di avvio (shell:startup) -->
+            <CheckBox x:Name="StartWithWindowsCheckBox" Margin="0,6,0,0"
+                      Click="StartWithWindowsCheckBox_Click">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Avvia con Windows (parte nella tray, senza finestra)"/>
+            </CheckBox>
+        </StackPanel>
+
+        <!-- Stato corrente -->
+        <TextBlock Grid.Row="4" x:Name="StatusText" Margin="0,8,0,0"
+                   Foreground="#555555" FontStyle="Italic"/>
+
+        <!-- Pulsanti -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="🔄 Aggiorna lista" Click="RefreshButton_Click"/>
+            <Button Content="✅ Seleziona" Click="SelectButton_Click"
+                    Background="#0078D4" Foreground="White" FontWeight="SemiBold"/>
+            <Button Content="❌ Rimuovi collegamento" Click="RemoveButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
