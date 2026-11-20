@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using VolumeRedirector.Models;
 
 namespace VolumeRedirector;
 
@@ -80,7 +81,7 @@ public partial class VolumeFlyoutWindow : Window
         // Tema e colore di accento si rileggono solo a ogni nuova apparizione
         if (!wasVisible)
         {
-            _light = IsSystemLightTheme();
+            _light = IsLightTheme();
             _accent = GetAccentColor();
         }
 
@@ -178,6 +179,14 @@ public partial class VolumeFlyoutWindow : Window
         };
         BeginAnimation(OpacityProperty, animation);
     }
+
+    // Tema scelto nelle impostazioni: con "Sistema" si usa quello di Windows
+    private static bool IsLightTheme() => App.SettingsService.Current.Theme switch
+    {
+        AppTheme.Light => true,
+        AppTheme.Dark => false,
+        _ => IsSystemLightTheme()
+    };
 
     private static bool IsSystemLightTheme()
     {

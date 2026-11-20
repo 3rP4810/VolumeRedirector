@@ -1,70 +1,148 @@
-﻿<Window x:Class="VolumeRedirector.MainWindow"
+﻿<ui:FluentWindow x:Class="VolumeRedirector.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         Title="Volume Redirector — Impostazioni"
-        Width="480" Height="480"
-        ResizeMode="NoResize"
+        Width="520" Height="740"
+        ResizeMode="CanMinimize"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        WindowCornerPreference="Round"
         WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="16">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Intestazione -->
-        <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Margin="0,0,0,4"
-                   Text="Seleziona applicazione target"/>
-        <TextBlock Grid.Row="1" Foreground="Gray" TextWrapping="Wrap" Margin="0,0,0,12"
-                   Text="I tasti Volume Su/Giù modificheranno il volume dell'app selezionata invece del volume di sistema."/>
+        <!-- Barra del titolo: solo riduzione a icona e chiusura -->
+        <ui:TitleBar Grid.Row="0" Title="Volume Redirector" ShowMaximize="False"/>
 
-        <!-- Lista delle app con sessione audio attiva -->
-        <Border Grid.Row="2" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="4">
-            <ListBox x:Name="AppListBox"
-                     SelectionMode="Single"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="4,6">
-                            <TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" Width="200"/>
-                            <TextBlock Foreground="Gray" FontSize="11"
-                                       Text="{Binding ProcessName, StringFormat='({0})'}" Margin="8,0,0,0"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Border>
+        <Grid Grid.Row="1" Margin="20,8,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <!-- Opzioni -->
-        <StackPanel Grid.Row="3" Margin="0,10,0,0">
-            <!-- Il pulsante Riduci a icona manda la finestra nella tray -->
-            <!-- <CheckBox x:Name="MinimizeToTrayCheckBox" Click="MinimizeToTrayCheckBox_Click">
-                <TextBlock TextWrapping="Wrap"
-                           Text="Il pulsante Riduci a icona manda la finestra nella tray"/>
-            </CheckBox> -->
+            <!-- Barra di stato: verde = app collegata, grigia = nessuna app, gialla = app collegata non in esecuzione -->
+            <Border Grid.Row="0" x:Name="StatusBar" CornerRadius="6" Padding="12,10" Margin="0,0,0,16">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse x:Name="StatusDot" Width="10" Height="10" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="StatusText" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
 
-            <!-- Crea/rimuove il collegamento nella cartella di avvio (shell:startup) -->
-            <CheckBox x:Name="StartWithWindowsCheckBox" Margin="0,6,0,0"
-                      Click="StartWithWindowsCheckBox_Click">
-                <TextBlock TextWrapping="Wrap"
-                           Text="Avvia con Windows (parte nella tray, senza finestra)"/>
-            </CheckBox>
-        </StackPanel>
+            <!-- Scegli l'app -->
+            <Grid Grid.Row="1" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Scegli l'app" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock TextWrapping="Wrap" Margin="0,2,16,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="I tasti Volume Su/Giù modificheranno il volume dell'app scelta invece del volume di sistema."/>
+                </StackPanel>
+                <ui:Button Grid.Column="1" Content="Aggiorna" VerticalAlignment="Top"
+                           Icon="{ui:SymbolIcon ArrowClockwise24}" Click="RefreshButton_Click"/>
+            </Grid>
 
-        <!-- Stato corrente -->
-        <TextBlock Grid.Row="4" x:Name="StatusText" Margin="0,8,0,0"
-                   Foreground="#555555" FontStyle="Italic"/>
+            <!-- Lista delle app con sessione audio attiva -->
+            <Border Grid.Row="2" CornerRadius="6" BorderThickness="1"
+                    BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                    Background="{DynamicResource ControlFillColorDefaultBrush}">
+                <Grid>
+                    <ListBox x:Name="AppListBox" SelectionMode="Single"
+                             BorderThickness="0" Background="Transparent"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="2,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-        <!-- Pulsanti -->
-        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-            <Button Content="🔄 Aggiorna lista" Click="RefreshButton_Click"/>
-            <Button Content="✅ Seleziona" Click="SelectButton_Click"
-                    Background="#0078D4" Foreground="White" FontWeight="SemiBold"/>
-            <Button Content="❌ Rimuovi collegamento" Click="RemoveButton_Click"/>
-        </StackPanel>
+                                    <!-- Icona dell'app; icona generica se non leggibile (come nella flyout) -->
+                                    <Grid Width="28" Height="28" Margin="0,0,12,0" VerticalAlignment="Center">
+                                        <Image Width="24" Height="24" Source="{Binding Icon}"
+                                               Visibility="{Binding IconVisibility}"/>
+                                        <TextBlock Text="&#xE71D;" FontSize="20"
+                                                   FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   Visibility="{Binding FallbackVisibility}"/>
+                                    </Grid>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding DisplayName}"/>
+                                        <TextBlock FontSize="12" TextTrimming="CharacterEllipsis"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Text="{Binding ProcessName}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Messaggio di elenco vuoto -->
+                    <TextBlock x:Name="EmptyListText" Visibility="Collapsed" IsHitTestVisible="False"
+                               TextWrapping="Wrap" TextAlignment="Center"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="24"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Nessuna app sta riproducendo audio: avvia la riproduzione e premi Aggiorna."/>
+                </Grid>
+            </Border>
+
+            <!-- Pulsanti -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,12,0,0">
+                <ui:Button Content="Seleziona" Appearance="Primary" Margin="0,0,8,0"
+                           Icon="{ui:SymbolIcon Checkmark24}" Click="SelectButton_Click"/>
+                <ui:Button Content="Rimuovi collegamento"
+                           Icon="{ui:SymbolIcon Dismiss24}" Click="RemoveButton_Click"/>
+            </StackPanel>
+
+            <!-- Impostazioni -->
+            <StackPanel Grid.Row="4" Margin="0,24,0,0">
+                <TextBlock Text="Impostazioni" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+                <!-- Crea/rimuove il collegamento nella cartella di avvio (shell:startup) -->
+                <ui:ToggleSwitch x:Name="StartWithWindowsToggle" Content="Avvia con Windows"
+                                 Click="StartWithWindowsToggle_Click"/>
+                <TextBlock Margin="0,0,0,12" FontSize="12" TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="Il programma parte nella tray, senza finestra."/>
+
+                <ui:ToggleSwitch x:Name="InterceptBluetoothToggle"
+                                 Content="Intercetta il volume dei dispositivi Bluetooth"
+                                 Click="InterceptBluetoothToggle_Click"/>
+                <TextBlock Margin="0,0,0,12" FontSize="12" TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="I gesti Volume Su/Giù di cuffie e altoparlanti Bluetooth, che Windows riceve come variazioni del volume di sistema, agiscono sull'app scelta."/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Tema" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" x:Name="ThemeComboBox" Width="160"
+                              SelectionChanged="ThemeComboBox_SelectionChanged">
+                        <ComboBoxItem Content="Sistema"/>
+                        <ComboBoxItem Content="Chiaro"/>
+                        <ComboBoxItem Content="Scuro"/>
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <!-- Notifiche in basso (conferme ed errori) -->
+        <ui:SnackbarPresenter Grid.Row="1" x:Name="SnackbarPresenter"
+                              VerticalAlignment="Bottom" Margin="20,0,20,16"/>
     </Grid>
-</Window>
+</ui:FluentWindow>
