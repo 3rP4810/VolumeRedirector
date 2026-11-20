@@ -2,157 +2,160 @@
 
 ## [1.1.0]
 
-### Aggiunto
-- Interfaccia grafica basata su **Wpf.Ui** per lo stile Fluent di Windows 11.
-- Supporto alle notifiche Toast tramite **Microsoft.Toolkit.Uwp.Notifications**.
-- Logging strutturato tramite **NLog** per la diagnostica e il tracciamento.
-- Aggiornamento della documentazione in `README.md` con le nuove funzionalità e dipendenze.
-Programma per Windows che fa agire i tasti multimediali **Volume Su**, **Volume Giù** e **Volume Muto** sul volume di **una sola app** (per esempio Spotify) invece che sul volume di sistema.
-
-Un'icona nell'area di notifica (tray) tiene il programma sempre pronto, e una piccola flyout nello stile di Windows 11 mostra l'app, il suo livello e se è muta. L'interfaccia utente è realizzata in stile Fluent UI moderno, supporta notifiche di sistema native (Toast) e integra un sistema avanzato di diagnostica tramite log.
-
-> 📷 **Segnaposto screenshot:** la flyout con icona, nome, altoparlante, barra e valore.
-> 📷 **Segnaposto screenshot:** la finestra delle impostazioni in stile Fluent UI.
+### Added
+- Graphical User Interface based on **Wpf.Ui** for Windows 11 Fluent Design style.
+- Native Toast Notification support via **Microsoft.Toolkit.Uwp.Notifications**.
+- Structured logging using **NLog** for diagnostics and tracking.
+- Documentation updates in `README.md` introducing new features and dependencies.
 
 ---
 
-## A cosa serve
+A Windows utility that redirects the media keys (**Volume Up**, **Volume Down**, and **Volume Mute**) to control the volume of a **single application** (such as Spotify) instead of the system master volume.
 
-Esempio pratico: stai guardando un video e ascolti musica in sottofondo con Spotify. Con Volume Redirector scegli Spotify come app collegata:
+A system tray icon keeps the application running in the background, while a modern Windows 11-style flyout shows the targeted app, its volume level, and mute status. The user interface features a modern Fluent UI design, supports native Windows Toast notifications, and integrates advanced diagnostic logging.
 
-- **Volume Su / Giù** alzano e abbassano solo la musica, senza toccare il video.
-- **Volume Muto** zittisce solo Spotify, mentre il resto del sistema continua a suonare.
-- Quando Spotify è chiuso, i tasti tornano a regolare il volume di sistema, così non restano mai inutilizzabili.
+> 📷 **Screenshot placeholder:** Flyout displaying application icon, name, speaker status, progress bar, and percentage.
+> 📷 **Screenshot placeholder:** Fluent UI Settings Window.
 
 ---
 
-## Caratteristiche
+## What It's For
 
-| Funzione | Cosa fa |
+**Practical Example:** You are watching a video while listening to background music on Spotify. By selecting Spotify as your target application in Volume Redirector:
+
+- **Volume Up / Down** will adjust only Spotify's volume, leaving the video playback unaffected.
+- **Volume Mute** will mute only Spotify while system audio continues playing.
+- If Spotify is closed, the media keys automatically fall back to controlling the system master volume so they remain functional at all times.
+
+---
+
+## Features
+
+| Feature | Description |
 |---|---|
-| **Interfaccia Fluent UI** | Interfaccia grafica moderna basata sulla libreria `Wpf.Ui`, integrata con lo stile visivo, gli elementi e il tema chiaro/scuro nativo di Windows 11. |
-| **Scelta dell'app** | Dalla finestra delle impostazioni scegli fra le app che hanno una sessione audio attiva (le stesse che vedi nel Mixer volume di Windows). |
-| **Volume Su / Giù** | Cambiano il volume dell'app scelta di un passo del 5% a ogni pressione, senza toccare quello di sistema. |
-| **Volume Muto** | Muta e riattiva solo l'app scelta. Il muto cambia una volta sola per pressione, anche se tieni il tasto premuto. |
-| **Flyout stile Windows 11** | A ogni tasto gestito compare una scheda con icona e nome dell'app, altoparlante, barra e valore del livello. Segue il tema chiaro o scuro e il colore di accento di Windows. |
-| **Ripiego su Windows** | Se non c me nessun'app scelta, o l'app scelta non ha una sessione audio, i tasti passano a Windows (volume o muto di sistema). |
-| **Notifiche Toast native e Tray** | Gestione degli avvisi tramite notifiche Toast native di Windows e avvisi a fumetto dalla tray se l'app scelta non è utilizzabile o sta usando il volume di sistema (limitati ad uno ogni 10 secondi). |
-| **Sistema di Logging (NLog)** | Tracciamento completo di eventi, errori e cambi di stato registrato su file di log per semplificare la diagnosi e la risoluzione dei problemi. |
-| **Avvio automatico con `--run`** | Parte nella tray senza finestra né avvisi: pensato per la cartella di avvio di Windows. |
-| **Avvio manuale** | Con un doppio clic sull'exe si apre la finestra delle impostazioni. |
-| **Istanza unica** | Può esserci una sola copia del programma per utente. Un secondo avvio manuale riporta in primo piano la finestra della copia già attiva. |
-| **Avvia con Windows** | Una casella nelle impostazioni crea e rimuove da sola il collegamento nella cartella di avvio, con l'argomento `--run`. |
-| **Icona nella tray** | Doppio clic per aprire le impostazioni; menù con **Impostazioni** ed **Esci**. |
+| **Fluent UI Interface** | Modern GUI built with `Wpf.Ui`, seamlessly matching Windows 11 visual elements and native Light/Dark themes. |
+| **App Selection** | Choose target apps from active audio sessions (the same list found in the Windows Volume Mixer). |
+| **Volume Up / Down** | Adjusts the target app volume in 5% increments per key press without modifying master volume. |
+| **Volume Mute** | Toggles mute state exclusively for the selected app. Mute changes once per key press, even when held down. |
+| **Windows 11-style Flyout** | Displays an overlay card with the app icon, name, volume bar, and percentage value upon key press. Adapts to Windows accent color and dark/light mode. |
+| **Windows System Fallback** | Reverts key presses to default system volume behavior if no target app is selected or if the targeted app has no active audio session. |
+| **Native Toast & Tray Alerts** | Toast notifications (`Microsoft.Toolkit.Uwp.Notifications`) and balloon tips alert when the target app cannot be controlled (rate-limited to 1 alert per 10 seconds). |
+| **Logging System (NLog)** | Comprehensive event, error, and status tracking recorded in log files to simplify troubleshooting and debugging. |
+| **Auto-start with `--run`** | Launches minimized directly to the system tray without showing a window or startup popups (designed for Windows Startup). |
+| **Manual Launch** | Double-clicking the executable opens the main settings window. |
+| **Single Instance** | Restricts execution to one single instance per user session. Launching a second manual instance brings the active window to the foreground. |
+| **Run at Startup** | A checkbox in settings creates or removes a shortcut in the Windows Startup folder with the `--run` flag. |
+| **System Tray Icon** | Double-click to open settings; includes a context menu with **Settings** and **Exit**. |
 
 ---
 
-## Requisiti
+## Requirements
 
-- **Windows 11.** La flyout e l'interfaccia principale sono disegnate sul modello di Windows 11 (utilizzando la libreria `Wpf.Ui` e il font *Segoe Fluent Icons*). Su Windows 10 il funzionamento non è stato verificato.
-- **.NET 10** (applicazione `net10.0-windows`): serve il *.NET 10 Desktop Runtime* per eseguirla, l'*SDK .NET 10* per compilarla.
-- Un dispositivo audio di riproduzione predefinito.
+- **Windows 11.** The flyout and main user interface are designed specifically for Windows 11 (using `Wpf.Ui` and the *Segoe Fluent Icons* font). Compatibility with Windows 10 is unverified.
+- **.NET 10** (`net10.0-windows` application): Requires the *.NET 10 Desktop Runtime* to execute and *.NET 10 SDK* to build.
+- An active default audio playback device.
 
-### Limiti noti
+### Known Limitations
 
-- Il programma controlla le sessioni audio del **dispositivo di riproduzione predefinito**.
-- La flyout compare sul **monitor principale**. Con giochi a schermo intero esclusivo può non essere visibile (funziona con la modalità finestra senza bordi).
-- Windows non consegna i tasti multimediali a un programma non elevato quando è in primo piano una finestra eseguita come amministratore. È un limite di Windows, non gestito dal programma.
-- **Controlli/gesti delle cuffie (es. Bluetooth)**: non è possibile impedire del tutto che il volume di sistema venga variato dai comandi deille cuffie. A differenza dei tasti della tastiera (che possono essere intercettati e bloccati dall'hook prima che Windows li usi), i gesti sulle cuffie arrivano già come variazione del volume del dispositivo applicata direttamente da Windows, senza un'API pubblica per intercettarli in anticipo (è possibile solo osservarli dopo). Con l'Absolute Volume attivo, il cursore di Windows e il volume della cuffia restano sincronizzati sul valore memorizzato nel dispositivo Bluetooth compatibile; disattivarlo non risolve il problema perché renderebbe indipendenti il volume di Windows e i tasti fisici delle cuffie, impedendo al programma di reagire (oltre a richiedere modifiche al registro di sistema con privilegi di amministratore e riavvio).
-
----
-
-## Installazione
-
-1. Installa il **.NET 10 Desktop Runtime** se non è già presente.
-2. Copia **tutta la cartella** con `VolumeRedirector.exe` e le sue DLL (`Wpf.Ui.dll`, `Wpf.Ui.Abstractions.dll`, `NLog.dll`, `Microsoft.Toolkit.Uwp.Notifications.dll`, librerie `NAudio`, ecc.) in un posto stabile, per esempio `C:\Programmi\VolumeRedirector\`.
-3. Avvia `VolumeRedirector.exe` con un doppio clic: si apre la finestra delle impostazioni.
-4. Facoltativo: spunta **Avvia con Windows** per farlo partire all'accesso (vedi [Avvio automatico](#avvio-automatico-con---run)).
-
-> Se sposti la cartella dopo aver attivato "Avvia con Windows", il collegamento punta al vecchio percorso e la casella risulta vuota. Riapri l'app dal nuovo percorso e spunta di nuovo la casella.
+- The app monitors audio sessions on the **default playback device**.
+- The flyout appears on the **primary monitor**. It may not be visible in exclusive full-screen games (borderless windowed mode is supported).
+- Windows limits media key interception for non-elevated applications when an elevated (Administrator) window is in the foreground. This is a system-level restriction.
+- **Headset / Bluetooth Controls**: It is not possible to prevent Bluetooth headset controls from modifying the system master volume. Unlike keyboard keys (which are intercepted and blocked by the low-level hook prior to Windows processing), headphone gestures arrive directly as device volume changes applied by Windows. There is no public API to intercept these in advance. When Absolute Volume is enabled, Windows volume and headset volume remain synchronized; disabling Absolute Volume decouples the controls, causing Windows to miss headset input entirely while requiring administrator registry modifications and system restarts.
 
 ---
 
-## Primo utilizzo
+## Installation
 
-1. Avvia l'app di cui vuoi regolare il volume (per esempio Spotify) e **fai partire un brano**: l'app compare nella lista solo se ha una sessione audio.
-2. Avvia Volume Redirector con un doppio clic. Si apre la finestra **Seleziona applicazione target** (interfaccia Fluent UI).
-3. Seleziona l'app nella lista. Se non la vedi, premi **🔄 Aggiorna lista**.
-4. Premi **✅ Seleziona**. Compare una conferma e la finestra si chiude. Il programma **resta attivo** nella tray.
-5. Premi **Volume Su** o **Volume Giù**: cambia il volume dell'app scelta e compare la flyout.
-6. Premi **Volume Muto**: l'app si zittisce e la flyout mostra l'altoparlante barrato. Premilo di nuovo per riattivarla.
-7. Per cambiare app o rimuovere il collegamento, fai doppio clic sull'icona nella tray.
+1. Install the **.NET 10 Desktop Runtime** if it is not already installed.
+2. Copy the **entire folder** containing `VolumeRedirector.exe` and its dependencies (`Wpf.Ui.dll`, `Wpf.Ui.Abstractions.dll`, `NLog.dll`, `Microsoft.Toolkit.Uwp.Notifications.dll`, `NAudio` libraries, etc.) to a permanent location (e.g., `C:\Program Files\VolumeRedirector\`).
+3. Launch `VolumeRedirector.exe` by double-clicking it to open the settings window.
+4. *(Optional)* Check **Run at Startup** to automatically launch the app when logging in (see [Auto-start](#auto-start-with---run)).
 
-> Se non vedi l'icona, controlla il menù delle icone nascoste (la freccetta **^** nella barra delle applicazioni). Puoi trascinarla fuori per tenerla sempre visibile: è Windows a decidere dove metterla.
+> If you relocate the folder after enabling "Run at Startup", the shortcut will point to the previous location. Open the app from its new location and re-check the startup box.
 
 ---
 
-## Funzionamento
+## First Steps
 
-### Cosa fanno i tasti
+1. Launch your desired app (e.g., Spotify) and **play audio**: the app will only appear in the list once an active audio session exists.
+2. Open Volume Redirector. The **Select Target Application** window will open.
+3. Select your application from the list. If it does not appear, click **🔄 Refresh List**.
+4. Click **✅ Select**. A confirmation will appear, and the window will close. The app **remains active in the system tray**.
+5. Press **Volume Up** or **Volume Down**: the target app's volume changes, and the flyout overlay displays.
+6. Press **Volume Mute**: the target app is muted, showing a muted speaker icon on the flyout. Press again to unmute.
+7. To change the targeted app or remove redirection, double-click the system tray icon.
 
-Per "sessione audio" si intende un'app che compare nel Mixer volume di Windows.
+> If the tray icon is hidden, check the overflow menu (the **^** arrow on the taskbar). You can drag the icon onto the main taskbar area.
 
-| Situazione | Volume Su / Giù | Volume Muto | Flyout | Avviso / Notifica Toast |
+---
+
+## How It Works
+
+### Key Behaviors
+
+An "audio session" refers to any app registered in the Windows Volume Mixer.
+
+| Condition | Volume Up / Down | Volume Mute | Flyout | Notification / Alert |
 |---|---|---|---|---|
-| **Nessuna app scelta** | Volume di sistema | Muto di sistema | No | No |
-| **App scelta ma chiusa** | Volume di sistema | Muto di sistema | No | «*Nome* non è in esecuzione» |
-| **App scelta aperta, senza sessione audio** (per esempio mai avviata la riproduzione) | Volume di sistema | Muto di sistema | No | «*Nome* è aperta ma non sta riproducendo audio, uso il volume di sistema» |
-| **App scelta con sessione audio** | Regolano l'app di ±5% | Inverte il muto dell'app | Sì | No |
-| **App scelta e muta** | **Su** toglie il muto e alza il volume. **Giù** lascia il muto e abbassa il livello. | Toglie il muto | Sì | No |
+| **No app selected** | System volume | System mute | No | No |
+| **Selected app closed** | System volume | System mute | No | "*App Name* is not running" |
+| **Selected app open, no active audio** | System volume | System mute | No | "*App Name* is open but not playing audio, using system volume" |
+| **Selected app with active audio session** | Adjusts app volume ±5% | Toggles app mute | Yes | No |
+| **Selected app is muted** | **Up** unmutes & raises volume. **Down** lowers volume while keeping muted. | Unmutes app | Yes | No |
 
-Altri dettagli:
+Additional details:
 
-- Quando i tasti passano a Windows compare la **flyout di sistema**, non la nostra, così non se ne vedono due.
-- Gli avvisi sono inviati tramite il centro notifiche native/tray al massimo **uno ogni 10 secondi**, uguali per i tasti volume e per il muto. Un clic sull'avviso apre la finestra delle impostazioni.
-- Il livello mostrato nella flyout è quello del cursore dell'app nel **Mixer volume**, non il volume finale ottenuto combinandolo con quello di sistema. Con il sistema al 30% e l'app al 100%, la flyout mostra 100.
+- When media keys fall back to Windows, the native **system flyout** is displayed instead of the custom overlay.
+- Alerts and notifications are rate-limited to **once every 10 seconds**. Clicking an alert opens the settings window.
+- The volume percentage shown in the flyout reflects the app's slider position in the **Windows Volume Mixer**, rather than the combined master output. (e.g., System volume at 30% and App volume at 100% displays 100%).
 
-### Avvio manuale
+### Manual Launch
 
-Un doppio clic sull'exe, senza argomenti, apre la finestra delle impostazioni. Se l'app salvata non è in esecuzione, compare anche un avviso all'avvio. Qualsiasi argomento diverso da `--run` viene trattato come un avvio manuale.
+Double-clicking the executable without command-line arguments opens the settings window. If the saved target app is not running, a warning notification displays. Any argument other than `--run` is treated as a manual launch.
 
-### Avvio automatico con `--run`
+### Auto-start with `--run`
 
-Con `--run` (maiuscole e minuscole indifferenti) il programma parte **solo nella tray**, senza finestra e senza avvisi di avvio.
+Passing `--run` launches the application **minimized in the system tray** without displaying the window or startup notifications.
 
-Puoi attivarlo in due modi:
+You can configure auto-start in two ways:
 
-**Con la casella** (consigliato): nella finestra delle impostazioni spunta **Avvia con Windows**. Il programma crea nella cartella di avvio il collegamento `VolumeRedirector.lnk` con destinazione l'exe seguito da `--run`. Togliendo la spunta il collegamento viene eliminato. La casella risulta spuntata solo se il collegamento esiste, punta a questo exe e ha `--run`.
+**Via Settings Checkbox (Recommended):** Check **Run at Startup** inside the settings window. This creates a `VolumeRedirector.lnk` shortcut pointing to the executable with the `--run` argument in your Windows Startup folder. Unchecking the box removes the shortcut.
 
-**A mano:** premi `Win + R`, scrivi `shell:startup`, crea un collegamento all'exe e nel campo *Destinazione* aggiungi `--run`:
+**Manually:** Press `Win + R`, type `shell:startup`, create a shortcut to the executable, and append `--run` in the *Target* path field:
 
+```text
+"C:\Program Files\VolumeRedirector\VolumeRedirector.exe" --run
 ```
-"C:\Programmi\VolumeRedirector\VolumeRedirector.exe" --run
-```
 
-### Una sola copia
+### Single Instance Management
 
-Esiste una sola istanza del programma per utente:
+Only one instance of Volume Redirector can run per user session:
 
-- Un **secondo avvio manuale** non apre una seconda copia: chiede a quella già attiva di mostrare la finestra e si chiude.
-- Un **secondo `--run`** si chiude subito, senza fare nulla.
+- Launching a **second manual instance** brings the active window to the foreground and exits.
+- Launching a **second `--run` instance** exits silently.
 
-### Uscire dal programma
+### Exiting the Application
 
-- Chiudere la finestra delle impostazioni, anche dopo **Seleziona**, **non** chiude il programma: resta nella tray.
-- Per chiuderlo davvero usa **Esci** dal menù dell'icona nella tray.
+- Closing the settings window does **not** exit the application; it continues running in the system tray.
+- To quit the app completely, right-click the system tray icon and select **Exit**.
 
-### Il muto resta attivo
+### Persistent Mute State
 
-Il programma **non toglie mai il muto in automatico**: né all'uscita, né se si chiude da solo, né con **Rimuovi collegamento**, né se scegli un'altra app. Se muti Spotify e poi esci, Spotify resta muta. Per riattivarla premi **Volume Su** finché il programma è attivo oppure usa il **Mixer volume** di Windows.
+Volume Redirector **never automatically unmutes an app** upon exit, closure, target removal, or app swapping. If Spotify is muted and you exit Volume Redirector, Spotify remains muted. You can unmute it via **Volume Up** while the program is running or through the **Windows Volume Mixer**.
 
 ---
 
-## Impostazioni, File e Diagnostica
+## Settings, Files, & Diagnostics
 
-### Impostazioni
+### Configuration File
 
-Il file delle impostazioni è:
+Settings are saved in JSON format at:
 
-```
+```text
 %APPDATA%\VolumeRedirector\settings.json
 ```
 
-Esempio:
+Example configuration:
 
 ```json
 {
@@ -163,71 +166,69 @@ Esempio:
 }
 ```
 
-| Voce | Significato |
+| Field | Description |
 |---|---|
-| `TargetProcessName` | Nome del processo dell'app scelta (per esempio `spotify`, `chrome`). Se vuoto, nessuna app è scelta. |
-| `TargetDisplayName` | Nome mostrato nella flyout e negli avvisi. |
-| `VolumeStep` | Passo del volume a ogni pressione, da 0.0 a 1.0. Predefinito `0.05` (5%). Viene riportato a `0.05` ogni volta che premi **Seleziona** o **Rimuovi collegamento**. |
+| `TargetProcessName` | Process name of the targeted application (e.g., `spotify`, `chrome`). Empty if no app is selected. |
+| `TargetDisplayName` | Friendly display name shown in flyouts and notifications. |
+| `VolumeStep` | Volume step per key press, between `0.0` and `1.0`. Default is `0.05` (5%). Resets to `0.05` when selecting or removing an app. |
 
-Se il file manca o non si legge, il programma parte con le impostazioni predefinite (nessuna app scelta).
+If the configuration file is missing or corrupted, default settings are applied (no app selected).
 
-### Logging e Diagnostica (NLog)
+### Diagnostic Logging (NLog)
 
-I file di log generati dalla libreria `NLog` vengono salvati nella cartella Dati applicazione o nella cartella di esecuzione per monitorare errori runtime, gestione delle sessioni audio e intercettazione delle hotkey:
+Log files generated by **NLog** are stored in the application data directory to assist in diagnosing runtime errors, hotkey interception, and audio session management:
 
-```
+```text
 %APPDATA%\VolumeRedirector\logs\
 ```
 
-### Collegamento di avvio
+### Startup Shortcut
 
-Creato dalla casella **Avvia con Windows**:
+Created when **Run at Startup** is enabled:
 
-```
+```text
 %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\VolumeRedirector.lnk
 ```
 
-Si apre anche con `Win + R` e `shell:startup`.
-
 ---
 
-## Risoluzione dei problemi
+## Troubleshooting
 
-| Problema | Causa probabile | Rimedio |
+| Problem | Cause | Solution |
 |---|---|---|
-| I tasti volume agiscono sempre sul sistema | Nessuna app scelta, oppure il programma non è in esecuzione | Cerca l'icona nella tray (anche fra quelle nascoste). Se non c'è, avvia il programma. Scegli un'app e premi **Seleziona**. |
-| I tasti agiscono sul sistema e compare un avviso | L'app scelta è chiusa o non ha una sessione audio | Avvia l'app e fai partire l'audio. Se non ti serve più, scegline un'altra. |
-| L'app non compare nella lista | Non ha una sessione audio attiva | Avvia la riproduzione e premi **🔄 Aggiorna lista**. |
-| L'app è muta e non so perché | Hai premuto **Volume Muto** | Premi **Volume Su** o **Volume Muto**, oppure usa il Mixer volume di Windows. |
-| Non vedo l'icona nella tray | Windows l'ha messa fra le icone nascoste | Apri la freccetta **^** e trascina l'icona fuori. |
-| L'icona del programma è quella predefinita | La risorsa dell'icona non è stata trovata e viene usata l'icona dell'exe | Controlla l'icona impostata nel progetto e ricompila. |
-| La flyout non compare | I tasti sono passati a Windows (nessuna app utilizzabile), il monitor principale non è quello che guardi, oppure sei in un gioco a schermo intero esclusivo | Controlla la tabella dei tasti. Usa la modalità finestra senza bordi. |
-| Non vedo l'avviso o la notifica Toast | Al massimo uno ogni 10 secondi, oppure Windows è in modalità "Non disturbare" / notifiche disattivate per l'app | Aspetta qualche secondo, oppure controlla il centro notifiche di Windows. |
-| La casella "Avvia con Windows" è vuota dopo averla spuntata | Hai spostato l'exe, o il collegamento è stato cancellato | Riapri l'app dal percorso definitivo e spunta di nuovo la casella. |
-| Errore creando il collegamento di avvio | La cartella di avvio non è skrivibile o manca il componente di Windows per i collegamenti | Leggi il messaggio mostrato. In alternativa crea il collegamento a mano con `shell:startup`. |
+| Volume keys always modify system volume | No target app selected, or Volume Redirector is not running | Locate the icon in the system tray. Select a target app and click **Select**. |
+| Volume keys affect system volume and show a notification | Target app is closed or has no active audio stream | Start the application and begin audio playback. |
+| Target app is missing from the list | No active audio session detected | Start playback in the app and click **🔄 Refresh List**. |
+| App is muted unexpectedly | **Volume Mute** was toggled | Press **Volume Up** or **Volume Mute**, or adjust it in the Windows Volume Mixer. |
+| System tray icon is missing | Windows hid the icon in the overflow menu | Click the **^** arrow in the taskbar and drag the icon into view. |
+| Application icon shows default image | Icon resource failed to load | Ensure icon resources are correctly bundled during compilation. |
+| Flyout overlay does not appear | Keys fell back to system, primary monitor is inactive, or a game is running in exclusive full-screen mode | Switch game settings to borderless windowed mode. |
+| Notifications are not appearing | Rate-limited (1 per 10s) or Windows "Do Not Disturb" / Focus Assist is active | Check the Windows Notification Center settings. |
+| "Run at Startup" checkbox unchecks itself | Executable was moved or shortcut was deleted | Re-open the app from its permanent location and re-enable startup. |
+| Startup shortcut creation failed | Startup folder is read-only or lacks permissions | Create the shortcut manually in `shell:startup`. |
 
 ---
 
-## Struttura del progetto e Dipendenze
+## Project Structure & Dependencies
 
-### Dipendenze principali
+### Main Dependencies
 
-- **`Wpf.Ui` / `Wpf.Ui.Abstractions`**: Libreria Fluent UI per l'interfaccia utente moderna stile Windows 11.
-- **`Microsoft.Toolkit.Uwp.Notifications`**: Gestione notifiche di sistema Toast native su Windows.
-- **`NLog`**: Framework di logging e diagnostica su file.
-- **`NAudio` (`NAudio.Wasapi`, `NAudio.Core`, ecc.)**: Gestione delle sessioni e flussi audio WASAPI di Windows.
+- **`Wpf.Ui` / `Wpf.Ui.Abstractions`**: Modern Windows 11 Fluent UI framework.
+- **`Microsoft.Toolkit.Uwp.Notifications`**: Windows native Toast notification library.
+- **`NLog`**: Structured logging framework.
+- **`NAudio` (`NAudio.Wasapi`, `NAudio.Core`, etc.)**: Windows WASAPI audio session manager.
 
-### Struttura dei file
+### File Structure
 
-| File | Ruolo |
+| File | Role |
 |---|---|
-| `App.xaml.cs` | Avvio, riconoscimento di `--run`, icona nella tray, gestione notifiche Toast, decisione su cosa fare a ogni tasto, creazione della flyout. |
-| `MainWindow.xaml` / `.cs` | Finestra delle impostazioni basata su **Wpf.Ui**: lista delle app, **Seleziona**, **Rimuovi collegamento**, **Avvia con Windows**. |
-| `VolumeFlyoutWindow.xaml` / `.cs` | Flyout: finestra trasparente, senza focus e non cliccabile, con tema Fluent UI, colore di accento, posizione e dissolvenze. |
-| `Services/HotkeyService.cs` | Hook globale di tastiera (`WH_KEYBOARD_LL`) per Volume Su, Giù e Muto. |
-| `Services/AudioService.cs` | Sessioni audio con NAudio: elenco delle app, ricerca della sessione, volume e muto. |
-| `Services/SettingsService.cs` | Lettura e scrittura di `settings.json`, con copia in memoria. |
-| `Services/SingleInstanceService.cs` | Istanza unica per utente e segnale "mostra la finestra". |
-| `Services/StartupShortcutService.cs` | Creazione, controllo e rimozione del collegamento nella cartella di avvio. |
-| `Services/NotificationService.cs` / Toast | Gestione integrata delle notifiche tramite `Microsoft.Toolkit.Uwp.Notifications`. |
-| `Models/AppSettings.cs` | Modello delle impostazioni. |
+| `App.xaml.cs` | App initialization, `--run` flag handling, system tray icon, Toast notifications, hotkey routing, flyout management. |
+| `MainWindow.xaml` / `.cs` | **Wpf.Ui** settings window: app list selection, **Select**, **Remove Link**, **Run at Startup**. |
+| `VolumeFlyoutWindow.xaml` / `.cs` | Transparent, non-focusable overlay window displaying Fluent UI themes, volume sliders, and accent colors. |
+| `Services/HotkeyService.cs` | Global low-level keyboard hook (`WH_KEYBOARD_LL`) for Volume Up, Down, and Mute. |
+| `Services/AudioService.cs` | Audio session enumerator and volume/mute manager using NAudio WASAPI. |
+| `Services/SettingsService.cs` | Reads and writes `settings.json` configuration files. |
+| `Services/SingleInstanceService.cs` | Single-instance app mutex manager and IPC window restore trigger. |
+| `Services/StartupShortcutService.cs` | Handles Windows Startup folder shortcut creation, detection, and removal. |
+| `Services/NotificationService.cs` | Native Toast notification dispatcher. |
+| `Models/AppSettings.cs` | Application settings data model. |
