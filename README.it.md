@@ -1,5 +1,7 @@
 # Volume Redirector
 
+[English](README.md) | [Italiano](README.it.md)
+
 ## [1.1.0]
 
 ### Aggiunto
